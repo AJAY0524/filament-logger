@@ -37,7 +37,7 @@ class NotificationLogger
             ->useLog(config('filament-logger.notifications.log_name'))
             ->setLogStatus(app(ActivityLogStatus::class))
             ->causedByAnonymous()
-            ->event(Str::of(class_basename($event))->headline())
+            ->event(Str::of(class_basename($event))->lower())
             ->log($description);
     }
 

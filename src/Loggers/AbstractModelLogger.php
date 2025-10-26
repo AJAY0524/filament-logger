@@ -75,7 +75,7 @@ abstract class AbstractModelLogger
 
     public function created(Model $model): void
     {
-        $this->log($model, 'Created', attributes: $model->getAttributes());
+        $this->log($model, 'created', attributes: $model->getAttributes());
     }
 
     public function updated(Model $model): void
@@ -87,11 +87,11 @@ abstract class AbstractModelLogger
             return;
         }
 
-        $this->log($model, 'Updated', attributes: $changes);
+        $this->log($model, 'updated', attributes: $changes);
     }
 
     public function deleted(Model $model): void
     {
-        $this->log($model, 'Deleted');
+        $this->log($model, 'deleted');
     }
 }
