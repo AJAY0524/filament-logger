@@ -1,6 +1,6 @@
 <?php
 
-namespace Z3d0X\FilamentLogger;
+namespace AJAY0524\FilamentLogger;
 
 use Filament\Facades\Filament;
 use Filament\Panel;
@@ -18,9 +18,9 @@ class FilamentLoggerServiceProvider extends PackageServiceProvider
 
     protected function getResources(): array
     {
-        return [
-            config('filament-logger.activity_resource')
-        ];
+        return array_filter([
+            config('filament-logger.activity_resource'),
+        ]);
     }
 
     public function configurePackage(Package $package): void
@@ -31,7 +31,7 @@ class FilamentLoggerServiceProvider extends PackageServiceProvider
             ->hasInstallCommand(function (InstallCommand $installCommand) {
                 $installCommand
                     ->publishConfigFile()
-                    ->askToStarRepoOnGitHub('z3d0x/filament-logger')
+                    ->askToStarRepoOnGitHub('ajay0524/filament-logger')
                     ->startWith(function (InstallCommand $installCommand) {
                         $installCommand->call('vendor:publish', [
                             '--provider' => "Spatie\Activitylog\ActivitylogServiceProvider",
@@ -65,18 +65,21 @@ class FilamentLoggerServiceProvider extends PackageServiceProvider
             $loggableResources = collect(Filament::getPanels())
                 ->flatMap(fn (Panel $panel) => $panel->getResources())
                 ->unique()
-                ->filter(function ($resource) use ($exceptResources) {
-                    return ! in_array($resource, $exceptResources);
-                });
+                ->filter(fn (string $resource): bool => ! in_array($resource, $exceptResources, true));
 
             foreach ($loggableResources as $resource) {
                 $resource::getModel()::observe(config('filament-logger.resources.logger'));
             }
         }
 
-        if (config('filament-logger.models.enabled', true) && ! empty(config('filament-logger.models.register'))) {
-            foreach (config('filament-logger.models.register', []) as $model) {
-                $model::observe(config('filament-logger.models.logger'));
+        if (config('filament-logger.models.enabled', true)) {
+            $models = array_filter(config('filament-logger.models.register', []));
+            $observer = config('filament-logger.models.logger');
+
+            if ($observer) {
+                foreach ($models as $model) {
+                    $model::observe($observer);
+                }
             }
         }
     }

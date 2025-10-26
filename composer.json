@@ -1,24 +1,29 @@
 {
-    "name": "z3d0x/filament-logger",
-    "description": "Activity logger for filament",
+    "name": "ajay0524/filament-logger",
+    "description": "Activity logger for Filament",
     "keywords": [
-        "Z3d0X",
+        "ajay0524",
         "laravel",
         "filament-logger"
     ],
-    "homepage": "https://github.com/z3d0x/filament-logger",
+    "homepage": "https://github.com/ajay0524/filament-logger",
     "license": "MIT",
     "authors": [
         {
             "name": "Ziyaan Hassan",
             "email": "ziyaan2010@gmail.com",
             "role": "Developer"
+        },
+        {
+            "name": "AJAY0524",
+            "email": "ajay0524@gmail.com",
+            "role": "Maintainer"
         }
     ],
     "require": {
-        "php": "^8.1",
-        "filament/filament": "^3.0",
-        "illuminate/contracts": "^8.0 | ^9.0 | ^10.0 | ^11.0 | ^12.0",
+        "php": "^8.2",
+        "filament/filament": "^4.0",
+        "illuminate/contracts": "^12.0",
         "spatie/laravel-activitylog": "^4.5",
         "spatie/laravel-package-tools": "^1.13.5"
     },
@@ -36,13 +41,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Z3d0X\\FilamentLogger\\": "src",
-            "Z3d0X\\FilamentLogger\\Database\\Factories\\": "database/factories"
+            "AJAY0524\\FilamentLogger\\": "src",
+            "AJAY0524\\FilamentLogger\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Z3d0X\\FilamentLogger\\Tests\\": "tests"
+            "AJAY0524\\FilamentLogger\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -60,11 +65,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Z3d0X\\FilamentLogger\\FilamentLoggerServiceProvider"
-            ],
-            "aliases": {
-                "FilamentLogger": "Z3d0X\\FilamentLogger\\Facades\\FilamentLogger"
-            }
+                "AJAY0524\\FilamentLogger\\FilamentLoggerServiceProvider"
+            ]
         }
     },
     "minimum-stability": "dev",

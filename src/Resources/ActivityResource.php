@@ -1,15 +1,16 @@
 <?php
 
-namespace Z3d0X\FilamentLogger\Resources;
+namespace AJAY0524\FilamentLogger\Resources;
 
+use BackedEnum;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Tables\Filters\Filter;
-use Filament\Forms\Components\Group;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
@@ -19,18 +20,17 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Placeholder;
+use Filament\Panel;
 use Spatie\Activitylog\Contracts\Activity;
 use Spatie\Activitylog\ActivitylogServiceProvider;
 use Spatie\Activitylog\Models\Activity as ActivityModel;
-use Z3d0X\FilamentLogger\Resources\ActivityResource\Pages;
+use AJAY0524\FilamentLogger\Resources\ActivityResource\Pages;
 
 class ActivityResource extends Resource
 {
     protected static ?string $label = 'Activity Log';
     protected static ?string $slug = 'activity-logs';
-
-    protected static ?string $navigationIcon = 'heroicon-o-clipboard-list';
-
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-clipboard-document-list';
 
     public static function getCluster(): ?string
     {
@@ -246,19 +246,24 @@ class ActivityResource extends Resource
 
     protected static function getSubjectTypeList(): array
     {
-        if (config('filament-logger.resources.enabled', true)) {
-            $subjects = [];
-            $exceptResources = [...config('filament-logger.resources.exclude'), config('filament-logger.activity_resource')];
-            $removedExcludedResources = collect(Filament::getResources())->filter(function ($resource) use ($exceptResources) {
-                return ! in_array($resource, $exceptResources);
-            });
-            foreach ($removedExcludedResources as $resource) {
-                $model = $resource::getModel();
-                $subjects[$model] = Str::of(class_basename($model))->headline();
-            }
-            return $subjects;
+        if (! config('filament-logger.resources.enabled', true)) {
+            return [];
         }
-        return [];
+
+        $subjects = [];
+        $exceptResources = [...config('filament-logger.resources.exclude'), config('filament-logger.activity_resource')];
+
+        $loggableResources = collect(Filament::getPanels())
+            ->flatMap(fn (Panel $panel) => $panel->getResources())
+            ->unique()
+            ->filter(fn (string $resource): bool => ! in_array($resource, $exceptResources, true));
+
+        foreach ($loggableResources as $resource) {
+            $model = $resource::getModel();
+            $subjects[$model] = Str::of(class_basename($model))->headline();
+        }
+
+        return $subjects;
     }
 
     protected static function getLogNameList(): array
@@ -333,20 +338,18 @@ class ActivityResource extends Resource
         return __('filament-logger::filament-logger.nav.log.label');
     }
 
-    public static function getNavigationIcon(): string
+    public static function getNavigationIcon(): string|BackedEnum|null
     {
         return __('filament-logger::filament-logger.nav.log.icon');
     }
 
-	public static function isScopedToTenant(): bool
+    public static function isScopedToTenant(): bool
     {
-		return config('filament-logger.scoped_to_tenant', true);
+        return config('filament-logger.scoped_to_tenant', true);
     }
 
-	public static function getNavigationSort(): ?int
-	{
-		return config('filament-logger.navigation_sort', null);
-	}
-
-	
+    public static function getNavigationSort(): ?int
+    {
+        return config('filament-logger.navigation_sort', null);
+    }
 }

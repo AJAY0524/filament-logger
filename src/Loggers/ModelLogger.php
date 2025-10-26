@@ -1,6 +1,6 @@
 <?php
 
-namespace Z3d0X\FilamentLogger\Loggers;
+namespace AJAY0524\FilamentLogger\Loggers;
 
 class ModelLogger extends AbstractModelLogger
 {

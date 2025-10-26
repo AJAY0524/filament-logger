@@ -1,6 +1,6 @@
 <?php
 
-namespace Z3d0X\FilamentLogger\Loggers;
+namespace AJAY0524\FilamentLogger\Loggers;
 
 use Filament\Facades\Filament;
 use Illuminate\Auth\Events\Login;
@@ -15,7 +15,7 @@ class AccessLogger
      * @param  Login  $event
      * @return void
      */
-    public function handle(Login $event)
+    public function handle(Login $event): void
     {
         $description = Filament::getUserName($event->user).' logged in';
 

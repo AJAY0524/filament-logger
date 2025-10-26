@@ -1,11 +1,10 @@
 <?php
 
-namespace Z3d0X\FilamentLogger\Loggers;
+namespace AJAY0524\FilamentLogger\Loggers;
 
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Notifications\Events\NotificationFailed;
 use Illuminate\Notifications\Events\NotificationSent;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\ActivityLogStatus;
 use Spatie\Activitylog\ActivityLogger;
@@ -18,7 +17,7 @@ class NotificationLogger
      * @param  NotificationSent|NotificationFailed  $event
      * @return void
      */
-    public function handle(NotificationSent|NotificationFailed $event)
+    public function handle(NotificationSent|NotificationFailed $event): void
     {
         $notification = class_basename($event->notification);
 
@@ -27,11 +26,11 @@ class NotificationLogger
         } else {
             $description = $notification.' Notification failed';
         }
-        
-        $receipent = $this->getRecipient($event->notifiable, $event->channel);
-        
-        if($receipent) {
-             $description .= ' to '.$receipent;
+
+        $recipient = $this->getRecipient($event->notifiable, $event->channel);
+
+        if ($recipient) {
+            $description .= ' to '.$recipient;
         }
 
         app(ActivityLogger::class)
@@ -44,7 +43,12 @@ class NotificationLogger
 
     public function getRecipient(mixed $notifiable, string $channel): ?string
     {
-        $notificationRoute = $notifiable->routeNotificationFor($channel);
-        return is_string($notificationRoute) ? $notificationRoute : null;
+        if (($notifiable instanceof AnonymousNotifiable) || method_exists($notifiable, 'routeNotificationFor')) {
+            $notificationRoute = $notifiable->routeNotificationFor($channel);
+
+            return is_string($notificationRoute) ? $notificationRoute : null;
+        }
+
+        return null;
     }
 }
