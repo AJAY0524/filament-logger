@@ -3,7 +3,7 @@
 namespace AJAY0524\FilamentLogger\Resources;
 
 use BackedEnum;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Facades\Filament;
@@ -37,9 +37,9 @@ class ActivityResource extends Resource
         return config('filament-logger.resources.cluster');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Group::make([
                     Section::make([
