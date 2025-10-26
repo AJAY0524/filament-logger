@@ -6,16 +6,13 @@ use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Notifications\Events\NotificationFailed;
 use Illuminate\Notifications\Events\NotificationSent;
 use Illuminate\Support\Str;
-use Spatie\Activitylog\ActivityLogStatus;
 use Spatie\Activitylog\ActivityLogger;
+use Spatie\Activitylog\ActivityLogStatus;
 
 class NotificationLogger
 {
     /**
      * Log the notification
-     *
-     * @param  NotificationSent|NotificationFailed  $event
-     * @return void
      */
     public function handle(NotificationSent|NotificationFailed $event): void
     {

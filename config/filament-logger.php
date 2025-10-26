@@ -1,7 +1,7 @@
 <?php
 return [
-    'datetime_format' => 'd/m/Y H:i:s',
-    'date_format' => 'd/m/Y',
+    'datetime_format' => 'Y/m/d H:i:s',
+    'date_format' => 'Y/m/d',
 
     'activity_resource' => \AJAY0524\FilamentLogger\Resources\ActivityResource::class,
 	'scoped_to_tenant' => true,

@@ -82,7 +82,7 @@ abstract class AbstractModelLogger
     {
         $changes = $model->getChanges();
 
-        //Ignore the changes to remember_token
+        // Ignore the changes to remember_token
         if (count($changes) === 1 && array_key_exists('remember_token', $changes)) {
             return;
         }
